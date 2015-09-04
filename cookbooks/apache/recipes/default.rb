@@ -23,11 +23,11 @@ node["apache"]["sites"].each do |sitename, data|
 	  	recursive true
 	  	action :create
 	end
-if node["platform"] == "ubuntu"
-	template_location = "/etc/apache2/sites-enabled/#{sitename}.conf"
-elsif node["platform"] == "centos"
-	template_location = "/etc/httpd/conf.d/#{sitename}.conf"	
-end
+	if node["platform"] == "ubuntu"
+		template_location = "/etc/apache2/sites-enabled/#{sitename}.conf"
+	elsif node["platform"] == "centos"
+		template_location = "/etc/httpd/conf.d/#{sitename}.conf"	
+	end
 	template template_location do
   		source 'vhost.erb'
 
@@ -62,13 +62,9 @@ execute 'rm /etc/httpd/conf.d/README' do
 end
 
 service 'httpd' do
-	supports :status => true, :restart => true, :reload => true
-	case node["platform"]
-		when "ubuntu"
-			service_name "apache2"
-		when "centos"
-			service_name "httpd"
-	end
+  service_name node['apache']['package']
+  supports :status => true, :restart => true, :reload => true
   action [:start, :enable]
 end
+
 #include_recipe 'php::default'

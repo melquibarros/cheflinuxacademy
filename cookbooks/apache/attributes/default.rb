@@ -3,7 +3,7 @@ default["apache"]["sites"]["melqui1b"] = {"site_title" => "melqui is comming soo
 
 default["apache"]["sites"]["melqui3"] = {"site_title" => "melqui is comming soon", "port" =>80, "domain" => "melqui3.mylabserver.com"}
 
-case node["plataform"]
+case node["platform"]
 when "centos"
 	default["apache"]["package"] = "httpd"
 when "ubuntu"
